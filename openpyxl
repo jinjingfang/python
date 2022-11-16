@@ -1,6 +1,5 @@
-#warm-up exersices for sorting out essential concepts
-
-#exersice 1
+# -------- WARM UP--------
+    # exersice 1
 name_list = []
 name_tuple = ('邱大仁', '徐小刚', '陈知枫', '陆任嘉')
 # 使用for循环和append()将元组name_tuple中的元素逐个添加到列表name_list中
@@ -8,7 +7,7 @@ for name in name_tuple:
     name_list.append(name)
 print(name_list)
 
-#exersice 2
+    # exersice 2
 staff_dict = {'邱大仁': ('领导', '积极善良的人'),
               '徐小刚': ('新人导师', '程序员'),
               '陈知枫': ('新人', 'Python爱好者'),
@@ -16,3 +15,263 @@ staff_dict = {'邱大仁': ('领导', '积极善良的人'),
 # 请取出'Python爱好者'，并打印
 print(staff_dict['陈知枫'][1])
 
+# -------- PART 1 WORKBOOK --------
+    ### Open workbook
+    # method 1
+import openpyxl
+# 通过文件路径，打开工作簿
+wb1 = openpyxl.load_workbook('./demo_excel.xlsx')
+# 用 Workbook() 创建新工作簿
+wb2 = openpyxl.Workbook()
+
+    # method 2
+from openpyxl import load_workbook, Workbook
+# 通过文件路径，打开已有工作簿
+wb1 = load_workbook('./demo_excel.xlsx')
+# 用 Workbook() 创建新工作簿
+wb2 = Workbook()
+
+    ### obtain object 获取工作簿对象
+    # method 1
+from openpyxl import load_workbook
+# 打开【公司人员名单.xlsx】工作簿
+staff_wb = load_workbook('./codes/material/公司人员名单.xlsx')
+# 打印工作簿对象
+print(staff_wb)
+# the results should be <openpyxl.workbook.workbook.Workbook object at xxxxxxxx>
+
+    # method 2: using Workbook () 实例化 workbook
+from openpyxl import Workbook
+# 新建工作簿
+new_wb = Workbook()
+# 打印工作簿对象
+print(new_wb)
+# results should be <openpyxl.workbook.workbook.Workbook object at xxxxxxxx>
+
+    ### save file
+from openpyxl import Workbook
+# 新建工作簿
+new_wb = Workbook()
+# 将新建的工作簿保存为【new_excel.xlsx】
+new_wb.save('./new_excel.xlsx')
+
+# -------- PART 1 EXCERSICE --------
+"""题目要求
+1. 打开material文件夹下的'practice0.xlsx'。
+2. 打印获得的工作簿对象。
+3. 新建一个工作簿。
+4. 打印新创建的工作簿对象。
+5. 将新工作簿保存在material文件夹下，命名为'practice0_result.xlsx'。 
+"""
+from openpyxl import load_workbook, Workbook
+
+# 打开【practice0.xlsx】工作簿
+practice_wb = load_workbook('./material/practice0.xlsx')
+# 打印工作簿对象
+print(practice_wb)
+
+# 新建工作簿对象
+new_wb = Workbook()
+# 打印新建的工作簿对象
+print(new_wb)
+
+# 将新建的工作簿保存为【practice0_result.xlsx】
+new_wb.save('./material/practice0_result.xlsx')
+
+# -------- PART 2 WORKSHEET --------
+    # method 1: 单一工作表情况下
+from openpyxl import load_workbook
+
+# 打开【公司人员名单.xlsx】工作簿
+staff_wb = load_workbook('./codes/material/公司人员名单.xlsx')
+# 获取活动工作表
+active_ws = staff_wb.active
+
+# 打印工作簿对象(Worksheet)
+print(staff_wb)
+# 打印工作表对象(Workbook)
+print(active_ws)
+
+    # method 2: 多张工作表情况下
+from openpyxl import load_workbook
+
+# 打开【公司人员名单.xlsx】工作簿
+staff_wb = load_workbook('./codes/material/公司人员名单.xlsx')
+# 按表名取表
+fhy_ws = staff_wb['上半年公司名单']  # fhy为first half year（上半年）的缩写
+shy_ws = staff_wb['下半年公司名单']  # shy为second half year（下半年）的缩写
+
+# 打印工作簿对象
+print(staff_wb)
+# 打印工作表对象
+print(fhy_ws)
+print(shy_ws)
+
+    # retrieve 1 row or column
+"""
+举个例子，假设用ws表示一个工作表对象，那么在这个工作表中：
+第一行就是ws[1]，第二行就是ws[2]，以此类推。
+第一列就是ws['A']、第二列就是ws['B']，以此类推.
+"""
+
+from openpyxl import load_workbook
+
+# 打开【公司人员名单.xlsx】工作簿
+staff_wb = load_workbook('./codes/material/公司人员名单.xlsx')
+# 获取活动工作表
+active_ws = staff_wb.active
+
+# 打印获取到的第五行数据
+print(active_ws[5])
+# 打印获取到的第二列数据
+print(active_ws['B'])
+
+    # retrieve > 1 row or column
+
+from openpyxl import load_workbook
+
+# 打开【公司人员名单.xlsx】工作簿
+staff_wb = load_workbook('./codes/material/公司人员名单.xlsx')
+# 获取【'上半年公司名单'】工作表
+fhy_ws = staff_wb['上半年公司名单']
+
+# 返回第2行至第12行，第2列（B列）至第3列（C列）这个范围的单元格内的所有数据（值）
+for row in fhy_ws.iter_rows(min_row=2, max_row=12, min_col=2, max_col=3, values_only=True):
+    print(row)
+
+    # add 1 row
+from openpyxl import load_workbook
+
+# 打开【公司人员名单.xlsx】工作簿
+staff_wb = load_workbook('./公司人员名单.xlsx')
+# 获取活动工作表
+active_ws = staff_wb.active
+
+info_list = ['S1911', '萧爵瑟', 3000, '内容'] #添加列表
+info_tuple = ('S1912', '吴琐薇', 5000, '销售') #添加元组
+
+active_ws.append(info_list)
+active_ws.append(info_tuple)
+
+# 保存工作簿为【append_demo.xlsx】
+staff_wb.save('./append_demo.xlsx')
+
+# -------- PART 2 EXCERSICE --------
+"""题目要求
+1. 打开material文件夹下的文件practice1.xlsx，获取下半年公司名单工作表。
+2. 然后打印出第5到第10行，前三列的所有数据（值）。
+3. 再给工作表的最后一行添加数据'S1911', '萧爵瑟', 3000, '内容'。
+4. 然后将结果保存在material文件夹下，并命名为`practice1_result.xlsx`。
+"""
+from openpyxl import load_workbook
+
+# 打开【practice1.xlsx】工作簿
+staff_wb = load_workbook('./material/practice1.xlsx')
+# 按表名取表
+staff_ws = staff_wb['下半年公司名单']
+
+# 打印出第5到第10行，前三列的所有数据（值）
+for row in staff_ws.iter_rows(min_row=5, max_row=10, max_col=3, values_only=True):
+    print(row)
+
+# 在工作表最后增加数据
+info_tuple = ('S1911', '萧爵瑟', 3000, '内容')
+staff_ws.append(info_tuple)
+
+# 保存结果为【practice1_result.xlsx】
+staff_wb.save('./material/practice1_result.xlsx')
+
+# -------- PART 3 CELL --------
+    ### retrieve cells
+    # method 1: using iter_rows
+from openpyxl import load_workbook
+
+# 打开【公司人员名单.xlsx】工作簿
+staff_wb = load_workbook('./codes/material/公司人员名单.xlsx')
+# 获取【'上半年公司名单'】工作表
+fhy_ws = staff_wb['上半年公司名单']
+
+# 返回第2行至第12行，第2列（B列）至第3列（C列）这个范围的所有单元格对象
+# 不写参数values_only，让其保持为默认的False，这样iter_rows()就会返回指定的单元格对象了
+for row in fhy_ws.iter_rows(min_row=2, max_row=12, min_col=2, max_col=3):
+    print(row)
+
+    # method 2: using "for"
+from openpyxl import load_workbook
+
+# 打开【公司人员名单.xlsx】工作簿
+staff_wb = load_workbook('./codes/material/公司人员名单.xlsx')
+# 获取活动工作表
+staff_ws = staff_wb.active
+
+# for循环遍历，取出第三行的所有单元格对象
+for row_cell in staff_ws[3]:
+    print(row_cell)
+
+# for循环遍历，取出第三列（C列）的所有单元格对象
+for col_cell in staff_ws['C']:
+    print(col_cell)
+    
+    # method 3: using workbook['location']
+from openpyxl import load_workbook
+
+# 打开【公司人员名单.xlsx】工作簿
+staff_wb = load_workbook('./codes/material/公司人员名单.xlsx')
+# 获取活动工作表
+staff_ws = staff_wb.active
+
+# 打印单元格对象A1
+print(staff_ws['A1'])
+
+    ### add values to cells
+# find vlues # 获取单元格的值
+#单元格对象.value
+# add values # 给单元格对象赋值
+#单元格对象.value = 值
+    
+    #example
+from openpyxl import load_workbook
+
+# 打开【公司人员名单.xlsx】工作簿
+staff_wb = load_workbook('./codes/material/公司人员名单.xlsx')
+# 获取活动工作表
+staff_ws = staff_wb.active
+
+# 打印单元格对象C2的值
+print(staff_ws['C2'].value)
+
+# 修改单元格对象C2的值为10000
+staff_ws['C2'].value = 10000
+
+# 打印修改后的单元格对象C2的值
+print(staff_ws['C2'].value)
+
+# 将结果保存为【公司人员名单_new.xlsx】
+staff_wb.save('./codes/material/公司人员名单_new.xlsx')
+
+# -------- PART 3 EXERCISE --------
+"""题目要求
+1. 通过代码，打开material文件夹下的文件practice2.xlsx，获取下半年公司名单工作表。
+2. 打印第四列（D列）除表头部门外的所有数据。
+3. 将原有的值全部修改为战略储备部。
+4. 将结果保存为practice2_result.xlsx。
+"""
+from openpyxl import load_workbook
+
+# 打开【practice2.xlsx】工作簿
+staff_wb = load_workbook('./material/practice2.xlsx')
+# 按表名取表
+staff_ws = staff_wb['下半年公司名单']
+
+# 循环获取第四列（D列）的所有单元格对象
+for col_cell in staff_ws['D']:
+    # 如果为表头，则跳过本次循环
+    if col_cell.value == '部门':
+        continue
+    # 打印原有的值
+    print(col_cell.value)
+    # 将原有的值修改为'战略储备部'
+    col_cell.value = '战略储备部'
+
+# 将结果保存为【'practice2_result.xlsx'】
+staff_wb.save('./material/practice2_result.xlsx')
