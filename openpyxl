@@ -1,0 +1,18 @@
+#warm-up exersices for sorting out essential concepts
+
+#exersice 1
+name_list = []
+name_tuple = ('邱大仁', '徐小刚', '陈知枫', '陆任嘉')
+# 使用for循环和append()将元组name_tuple中的元素逐个添加到列表name_list中
+for name in name_tuple:
+    name_list.append(name)
+print(name_list)
+
+#exersice 2
+staff_dict = {'邱大仁': ('领导', '积极善良的人'),
+              '徐小刚': ('新人导师', '程序员'),
+              '陈知枫': ('新人', 'Python爱好者'),
+              '陆任嘉': ('员工', '刚毅的人')}
+# 请取出'Python爱好者'，并打印
+print(staff_dict['陈知枫'][1])
+
