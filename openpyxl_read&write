@@ -1,0 +1,248 @@
+#This is the basic codes for reading and writing using the library openpyxl
+
+# -------- EXERCISE 1 --------
+# -------- Load and add values --------
+# Background:
+  # 10月员工绩效表（workbook）
+  # [工号, 姓名, 部门, 绩效, 奖金, 基本工资, 是否确认]
+  # 江宇工资信息表（workbook）
+  # [工号, 姓名, 部门, 月份, 绩效, 奖金, 基本工资]
+  
+# 从openpyxl库导入load_workbook函数
+from openpyxl import load_workbook
+
+# 打开【10月员工绩效表】的工作簿，获取活动工作表
+performance_wb  = load_workbook('./material/10月员工绩效表.xlsx')
+performance_ws = performance_wb.active
+
+# 打开【江宇工资信息表】的工作簿，获取活动工作表
+info_wb = load_workbook('./material/江宇工资信息表.xlsx')
+info_ws = info_wb.active
+
+# 获取【绩效】值
+performance = performance_ws['D14'].value
+# 获取【奖金】值
+bonus = performance_ws['E14'].value
+# 获取【基本工资】值
+base = performance_ws['F14'].value
+
+# 写入【绩效】值
+info_ws['E11'].value = performance
+# 写入【奖金】值
+info_ws['F11'].value = bonus
+# 写入【基本工资】值
+info_ws['G11'].value = base
+
+# 保存对【江宇工资信息表】工作簿的写入
+info_wb.save('./material/江宇工资信息表.xlsx')
+
+# -------- EXERCISE 2 --------
+# -------- Create new workbook --------
+
+# 从openpyxl库导入load_workbook和Workbook
+from openpyxl import load_workbook, Workbook
+
+# 打开【10月员工绩效表.xlsx】工作簿
+performance_wb = load_workbook('./material/10月员工绩效表.xlsx')
+# 获取活动工作表
+performance_ws = performance_wb.active
+
+# 新建工作簿
+new_wb = Workbook()
+# 获取活动工作表
+new_ws = new_wb.active
+
+# 获取performance_ws的前十行数据
+for row in performance_ws.iter_rows(max_row=10, values_only=True):
+    # 将数据写入新的工作表
+    new_ws.append(row)
+
+# 保存新工作簿为【员工绩效表-模板.xlsx】
+new_wb.save('./material/员工绩效表-模板.xlsx')
+
+# -------- EXERCISE 3 --------
+# -------- Print --------
+
+# 从openpyxl库导入load_workbook和Workbook
+from openpyxl import load_workbook, Workbook
+
+# 打开【10月员工绩效表.xlsx】工作簿
+performance_wb = load_workbook('./material/10月员工绩效表.xlsx')
+# 获取活动工作表
+performance_ws = performance_wb.active
+
+# 获取performance_ws中除表头外的数据
+for row in performance_ws.iter_rows(min_row=2, values_only=True):
+    # 读取【工号】
+    staff_id = row[0]
+    # 读取【员工姓名】
+    staff_name = row[1]
+    # 读取【绩效】
+    performance = row[3]
+    # 读取【提成】
+    bonus = row[4]
+    # 计算“奖金”
+    award = performance + bonus
+    # 打印结果
+    print('工号：{}，姓名：{}，本月奖金为：{}'.format(staff_id, staff_name, award))
+
+# -------- EXERCISE 4 --------
+# -------- Create dictionary --------
+  # Background:
+  # [工号, 姓名, 部门, 绩效, 奖金, 基本工资, 是否确认]
+  # column A could be one KEY; row 1 could be one KEY
+  # cell corresponds to VALUE belonging to each KEY
+  
+# 从openpyxl库导入load_workbook函数
+from openpyxl import load_workbook
+
+# 打开【10月员工绩效表.xlsx】工作簿
+performance_wb = load_workbook('./material/10月员工绩效表.xlsx')
+# 获取活动工作表
+performance_ws = performance_wb.active
+
+# 创建员工信息字典
+staff_info = {}
+
+# 从第二行开始读取工作表中的信息
+for row in performance_ws.iter_rows(min_row=2, values_only=True):
+    # 取出工号
+    member_number = row[0]
+    # 将信息存入员工信息字典
+    staff_info[member_number] = {
+         '姓名': row[1],
+         '部门': row[2],
+         '绩效': row[3],
+         '奖金': row[4],
+         '基本工资': row[5],
+         '是否确认': row[6]
+     }
+print(staff_info)
+
+  #### note 1
+# 从openpyxl库中导入load_workbook函数
+from openpyxl import load_workbook
+
+# 打开【10月员工绩效表.xlsx】工作簿，相对路径为./material/10月员工绩效表.xlsx
+wb = load_workbook('./material/10月员工绩效表.xlsx')
+# 使用工作簿的active属性，获取活动工作表，存储在变量ws中
+ws = wb.active
+
+# 使用工作表的iter_rows方法，最少从第2行取起，values_only参数为True
+for row in ws.iter_rows(min_row=2, values_only=True):
+    # 打印查看，获取的数据
+    print(row)
+    
+  #### note 2
+# 创建员工信息字典
+staff_info = {}
+
+# 从第二行开始读取工作表中的信息
+for row in performance_ws.iter_rows(min_row=2, values_only=True):
+    # 先提取一行的第1个单元格row[0]——“工号”，存储在变量member_number中，方便后续使用。
+    member_number = row[0]
+    # 通过将右侧的值赋给左侧的staff_info[member_number]取到的键，来写入一对键值对。
+    staff_info[member_number] = {
+        '姓名': row[1],
+        '部门': row[2],
+        '绩效': row[3],
+        '奖金': row[4],
+        '基本工资': row[5],
+        '是否确认': row[6]
+    }
+print(staff_info)
+
+# -------- EXERCISE 5 --------
+# 设置薪资信息字典（以前8条数据为例）
+staff_info = {
+    'S1001': {'姓名': '吕建国', '部门': '销售部', '绩效': 100, '提成': 2250, '基本工资': 7500, '是否确认': '是'},
+    'S1002': {'姓名': '张想', '部门': '后勤部', '绩效': 100, '提成': 4250, '基本工资': 7500, '是否确认': '是'},
+    'S1003': {'姓名': '王淑兰', '部门': '后勤部', '绩效': 300, '提成': 3500, '基本工资': 6500, '是否确认': '是'},
+    'S1004': {'姓名': '赵丽娟', '部门': '开发部', '绩效': 100, '提成': 2750, '基本工资': 7500, '是否确认': '否'},
+    'S1005': {'姓名': '陈利', '部门': '开发部', '绩效': 100, '提成': 1750, '基本工资': 6000, '是否确认': '是'},
+    'S1006': {'姓名': '车敏', '部门': '销售部', '绩效': 300, '提成': 4250, '基本工资': 7000, '是否确认': '是'},
+    'S1007': {'姓名': '孙飞', '部门': '运营部', '绩效': 200, '提成': 1500, '基本工资': 7000, '是否确认': '是'},
+    'S1008': {'姓名': '陈彬', '部门': '后勤部', '绩效': 300, '提成': 1500, '基本工资': 9500, '是否确认': '是'}
+}
+
+# 输入你想查询的员工的工号
+staff_id = input('请输出你所查询员工的工号(如:S1001):')
+
+# 根据工号（键）找到员工信息（值）
+dict_staff = staff_info.get(staff_id)
+
+# 判断该员工是否存在
+if dict_staff:
+    # 输入你想要查询的员工信息
+    search_info = input('请输出你想查询的信息(如：姓名/部门/绩效/提成/是否确认)：')
+
+    # 判断该员工信息是否存在
+    if dict_staff.get(search_info):
+        print('经查询，该员工' + search_info + '为：')
+        print(dict_staff[search_info])
+    # 无此表头时，无法查询
+    else:
+        print('所输信息类型错误，只能查询姓名、部门、绩效、提成、是否确认')
+
+# 无此工号时，无法查询
+else:
+    print('所输工号错误')
+
+# -------- ASSIGNMENT --------
+# 课后练习：取数汇总并写入
+#【目的】：获取【江宇工资信息表】中10月的绩效、提成、基本工资，计算出总和，写入到【江宇工资信息表】并保存。
+#【江宇工资信息表-相对路径】：./material/江宇工资信息表.xlsx
+
+# 单元格读写
+# 从openpyxl库导入load_workbook函数
+from openpyxl import load_workbook
+
+# 打开【江宇工资信息表】的工作簿，获取活动工作表
+performance_wb  = load_workbook('./material/江宇工资信息表.xlsx')
+performance_ws = performance_wb.active
+
+# 打开【江宇工资信息表】的工作簿，获取活动工作表
+info_wb = load_workbook('./material/江宇工资信息表.xlsx')
+info_ws = info_wb.active
+
+# 获取【绩效】值
+performance = performance_ws['E11'].value
+# 获取【提成】值
+bonus = performance_ws['F11'].value
+# 获取【基本工资】值
+base = performance_ws['G11'].value
+# 总工资计算
+total = performance +bonus+base
+
+# 写入【绩效】值
+info_ws['E11'].value = performance
+# 写入【提成】值
+info_ws['F11'].value = bonus
+# 写入【基本工资】值
+info_ws['G11'].value = base
+# 写入【总工资】值
+info_ws['H11'].value = total
+info_ws['H1'].value = '总工资'
+
+# 保存对【江宇工资信息表】工作簿的写入
+info_wb.save('./material/江宇工资信息表.xlsx')
+
+### Answer
+# 导入模块
+from openpyxl import load_workbook
+
+# 获取数据
+wb  = load_workbook('./material/江宇工资信息表.xlsx')
+ws = wb['Sheet1']
+
+performance = ws['E11'].value
+bonus = ws['F11'].value
+base = ws['G11'].value
+
+# 使用数据
+salary = performance + bonus + base
+
+# 输出结果
+ws['H1'].value = '总工资'
+ws['H11'].value = salary
+wb.save('./material/江宇工资信息表.xlsx')
