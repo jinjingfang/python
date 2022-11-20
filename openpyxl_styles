@@ -1,0 +1,273 @@
+# Codes for changing format-related settings in excel
+# -------- PRE-EXERCISE --------
+# Changing 52 files into the same formant
+
+import os
+from openpyxl import load_workbook
+from openpyxl.styles import PatternFill, Alignment, Side, Border
+
+# 定义表头颜色样式为橙色
+header_fill = PatternFill('solid', fgColor='FF7F24')
+# 定义表中颜色样式为淡黄色
+content_fill = PatternFill('solid', fgColor='FFFFE0')
+# 定义表尾颜色样式为淡桔红色
+bottom_fill = PatternFill('solid', fgColor='EE9572')
+
+# 定义对齐样式横向居中、纵向居中
+align = Alignment(horizontal='center', vertical='center')
+
+# 定义边样式为细条
+side = Side('thin')
+# 定义表头边框样式，有底边和右边
+header_border = Border(bottom=side, right=side)
+# 定义表中、表尾边框样式，有左边
+content_border = Border(left=side)
+
+# 设置文件夹路径
+path = './各部门利润表汇总_副本/'
+# 返回当前目录下所有文件名
+files = os.listdir(path)
+
+# 循环文件名列表
+for file in files:
+    # 拼接文件路径
+    file_path = path + file
+    # 打开工作簿
+    wb = load_workbook(file_path)
+    # 打开工作表
+    ws = wb.active
+
+    # 调整列宽
+    ws.column_dimensions['A'].width = 10
+    ws.column_dimensions['B'].width = 25
+    ws.column_dimensions['C'].width = 50
+    ws.column_dimensions['D'].width = 10
+    ws.column_dimensions['E'].width = 20
+    ws.column_dimensions['F'].width = 15
+
+    ### 循环修改单元格
+    # 循环第一行单元格，调整表头样式
+    for cell in ws[1]:
+        # 设置单元格填充颜色
+        cell.fill = header_fill
+        # 设置单元格对齐方式
+        cell.alignment = align
+        # 设置单元格边框
+        cell.border = header_border
+
+    # 获取最后一行行号
+    row_num = ws.max_row
+
+    # 从第二行开始，循环到倒数第二行
+    for row in ws.iter_rows(min_row=2, max_row=(row_num-1)):
+        # 循环取出单元格，调整表中样式
+        for cell in row:
+            cell.fill = content_fill
+            cell.alignment = align
+            cell.border = content_border
+
+    # 循环最后一行单元格，调整表尾样式
+    for cell in ws[row_num]:
+        cell.fill = bottom_fill
+        cell.alignment = align
+        cell.border = content_border
+
+    # 保存
+    wb.save(file_path)
+
+# -------- PRE-EXERCISE 2 --------
+  ## Open workbook and worksheet
+# 导入openpyxl库中的load_workbook函数
+from openpyxl import load_workbook
+# 文件存储路径
+file_path = './material/事业01部_副本.xlsx'
+# 打开工作簿
+wb = load_workbook(file_path)
+# 打开活动工作表
+ws = wb.active
+  
+  ## print cell
+# 导入模块
+from openpyxl import load_workbook
+# 打开工作表
+file_path = './material/事业01部_副本.xlsx'
+wb = load_workbook(file_path)
+ws = wb.active
+
+# 取出工作表第二行所有单元格，打印它们的值
+for cell in ws[2]:
+    print(cell.value)
+  
+  ## 将下面列表temp_list中的数字逐个都打印出来
+temp_list = [[0, 1, 2], [3, 4, 5], [6, 7, 8]]
+# 先遍历最外层的列表，取出三个元素
+for item in temp_list:
+    # 再遍历三个列表，取出其中的元素
+    for number in item:
+        print(number)
+
+# -------- SETTING EXCEL FORMATS -------
+  ### 获取所有文件路径 ###
+# 导入模块
+import os
+# 设置文件夹路径
+path = './各部门利润表汇总/'
+
+# 返回当前目录下所有文件名：os.listdir的功能是取出path路径的文件夹下所有工作簿的文件名
+# files变量中存储着52个工作簿的文件名，是一个文件名列表
+files = os.listdir(path)
+
+# 循环文件名列表
+for file in files:
+    # 拼接文件路径
+    file_path = path + file
+    # 打印文件路径
+    print(file_path)
+    # 有了循环获取的路径，就可以去实现第一个功能块——打开工作表啦
+    # 打开工作簿
+    wb = load_workbook(file_path)
+    # 打开工作表
+    ws = wb.active
+    
+  ### 调整列宽 ###
+from openpyxl import load_workbook
+
+# 打开工作表
+file_path = './material/事业01部_副本.xlsx'
+wb = load_workbook(file_path)
+ws = wb.active
+
+# 调整第二列列宽
+ws.column_dimensions['B'].width = 20
+
+# 保存
+wb.save(file_path)
+
+  ### 定义单元格样式 ###
+from openpyxl.styles import PatternFill, Alignment, Side, Border
+
+# 定义表头颜色样式为橙色
+header_fill = PatternFill('solid', fgColor='FF7F24')
+# 定义表中颜色样式为淡黄色
+content_fill = PatternFill('solid', fgColor='FFFFE0')
+# 定义表尾颜色样式为淡桔红色
+bottom_fill = PatternFill('solid', fgColor='EE9572')
+
+# 定义对齐样式横向居中、纵向居中
+align = Alignment(horizontal='center', vertical='center')
+
+# 定义边样式为细条
+side = Side('thin')
+# 定义表头边框样式，有底边和右边
+header_border = Border(bottom=side, right=side)
+# 定义表中、表尾边框样式，有左边
+content_border = Border(left=side)
+#[...] Omission of other codes in between
+    for cell in ws[1]:
+        # 设置单元格填充颜色
+        cell.fill = header_fill
+        # 设置单元格对齐方式
+        cell.alignment = align
+        # 设置单元格边框
+        cell.border = header_border
+
+  ### 修改表头单元格 ###
+# 导入模块
+from openpyxl import load_workbook
+from openpyxl.styles import PatternFill, Alignment, Side, Border
+# 定义表头颜色样式为橙色
+header_fill = PatternFill('solid', fgColor='FF7F24')
+# 定义表中颜色样式为淡黄色
+content_fill = PatternFill('solid', fgColor='FFFFE0')
+# 定义表尾颜色样式为淡桔红色
+bottom_fill = PatternFill('solid', fgColor='EE9572')
+# 定义对齐样式横向居中、纵向居中
+align = Alignment(horizontal='center', vertical='center')
+# 定义边样式为细条
+side = Side('thin')
+# 定义表头边框样式，有底边和右边
+header_border = Border(bottom=side, right=side)
+# 定义表中、表尾边框样式，有左边
+content_border = Border(left=side)
+# 打开工作表
+file_path = './material/事业01部_副本.xlsx'
+wb = load_workbook(file_path)
+ws = wb.active
+# 循环第一行单元格，调整表头样式
+for cell in ws[1]:
+# 修改单元格填充颜色
+cell.fill = header_fill
+# 修改单元格对齐方式
+cell.alignment = align
+# 修改单元格边框
+cell.border = header_border
+
+  ### Sheet.max_row ###
+# 导入模块
+from openpyxl import load_workbook
+from openpyxl.styles import PatternFill
+# 打开工作表
+file_path = './material/事业02部_副本.xlsx'
+wb = load_workbook(file_path)
+ws = wb.active
+
+# 打印最大行max_row
+print(ws.max_row)
+
+## NOTES:
+## 对于各种不同的工作表ws，其“表中的数据范围”（从第2行到倒数第2行）
+ws.iter_rows(min_row = 2, max_row = ws.max_row - 1)
+## 调整“表中”的单元格样式，还需要能够取到每一个单元格。这里我们需要用到for循环的嵌套
+for row in ws.iter_rows(min_row=2, max_row = ws.max_row - 1):
+    for cell in row:
+        print(cell)
+
+  ### 修改“表中”单元格的练习 ###
+# 导入模块
+from openpyxl import load_workbook
+from openpyxl.styles import PatternFill, Alignment, Side, Border
+# 定义表头颜色样式为橙色
+header_fill = PatternFill('solid', fgColor='FF7F24')
+# 定义表中颜色样式为淡黄色
+content_fill = PatternFill('solid', fgColor='FFFFE0')
+# 定义表尾颜色样式为淡桔红色
+bottom_fill = PatternFill('solid', fgColor='EE9572')
+# 定义对齐样式横向居中、纵向居中
+align = Alignment(horizontal='center', vertical='center')
+# 定义边样式为细条
+side = Side('thin')
+# 定义表头边框样式，有底边和右边
+header_border = Border(bottom=side, right=side)
+# 定义表中、表尾边框样式，有左边
+content_border = Border(left=side)
+# 打开工作表
+file_path = './material/事业01部_副本.xlsx'
+wb = load_workbook(file_path)
+ws = wb.active
+# 获取最后一行行号
+row_num = ws.max_row
+# 从第二行开始，循环到倒数第二行
+for row in ws.iter_rows(min_row=2, max_row=row_num-1):
+# 循环取出单元格，调整表中样式
+for cell in row:
+  cell.fill = content_fill
+  cell.alignment = align
+  cell.border = content_border
+
+  ### 修改表尾样式 ###
+# 定义表中颜色样式为淡黄色
+content_fill = PatternFill('solid', fgColor='FFFFE0')
+# 定义表尾颜色样式为淡桔红色
+bottom_fill = PatternFill('solid', fgColor='EE9572')
+# 定义对齐样式横向居中、纵向居中
+align = Alignment(horizontal='center', vertical='center')
+
+# 遍历最后一行
+for cell in ws[row_num]:
+  cell.fill = bottom_fill
+  cell.alignment = align
+  cell.border = content_border
+  
+  ### 保存工作簿 ###
+wb.save(file_path)
+
