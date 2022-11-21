@@ -1,4 +1,5 @@
 # Using openpyxl and email.mine.X to send email
+# how to set up host and port can be found here: https://docs.forchange.cn/docs/Q50coQkLEK8B87mA
 # -------- EXAMPLE --------
 from openpyxl import load_workbook
 import smtplib
