@@ -1,0 +1,321 @@
+# This illustrates how to add the same contents to different documents
+# Description:
+# 批量在 Word 文件结尾处添加文字和图片，并设置添加文字的对齐方式，字体大小，加粗等功能
+# -------- EXAMPLE --------
+import os
+from docx import Document
+from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.shared import Pt
+
+# 设置目标文件夹路径
+path = "../工作/涨薪通告-练习/"
+
+# 获取目标文件夹下的所有文件名
+file_list = os.listdir(path)
+
+for file in file_list:
+    # 拼接文件路径
+    file_path = path + file
+    
+    # 打开 Word 文件
+    doc = Document(file_path)
+
+    # 添加 Paragraph 对象 para_1
+    para_1 = doc.add_paragraph('盖章: ')
+    # 添加 Run 对象 run_stamp
+    run_stamp = para_1.add_run()
+    run_stamp.add_picture("./Shining.png")
+
+    # 添加 Paragraph 对象 para_2
+    para_2 = doc.add_paragraph()
+    # 设置对齐方式
+    para_2.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+    # 添加 Run 对象 run_comp
+    run_comp = para_2.add_run('闪光科技金融公司(Shining Fintech Company)')
+    # 设置字体
+    run_comp.font.size = Pt(14) # 字体大小
+    run_comp.font.bold = True # 字体加粗
+
+    # 保存文件
+    doc.save(file_path)
+
+# -------- FUNCTION 1 --------
+# 添加文字和图片，即添加文字盖章：和公司电子章图片。
+import os
+from docx import Document
+# 设置目标文件夹路径
+path = "../工作/涨薪通告-练习/"
+
+# 获取目标文件夹下的所有文件名
+file_list = os.listdir(path)
+
+for file in file_list:
+    # 拼接文件路径
+    file_path = path + file
+    
+    # 打开 Word 文件
+    doc = Document(file_path)
+
+    # 添加 Paragraph 对象 para_1
+    para_1 = doc.add_paragraph('盖章: ')
+    # 添加 Run 对象 run_stamp
+    run_stamp = para_1.add_run()
+    run_stamp.add_picture("./Shining.png")
+
+# -------- FUNCTION 2 --------
+# 添加带样式的文字，即添加公司名称，并设置字号，加粗和右对齐。
+import os
+from docx import Document
+from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.shared import Pt
+# 设置目标文件夹路径
+path = "../工作/涨薪通告-练习/"
+
+# 获取目标文件夹下的所有文件名
+file_list = os.listdir(path)
+
+for file in file_list:
+    # 拼接文件路径
+    file_path = path + file
+    
+    # 打开 Word 文件
+    doc = Document(file_path)
+
+    # 添加 Paragraph 对象 para_2
+    para_2 = doc.add_paragraph()
+    # 设置对齐方式
+    para_2.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+    # 添加 Run 对象 run_comp
+    run_comp = para_2.add_run('闪光科技金融公司(Shining Fintech Company)')
+    # 设置字体
+    run_comp.font.size = Pt(14) # 字体大小
+    run_comp.font.bold = True # 字体加粗
+    
+# -------- WARM UP --------
+# 请你使用 os.listdir()、for 循环和字符串拼接这三个知识点
+# 然后根据代码注释补全下面的代码，打印出目标文件夹下所有文件的路径。
+
+import os
+
+# 设置目标文件夹路径
+path = "./工作/涨薪通告-练习/"
+# 获取目标文件夹下的所有文件名
+file_list = os.listdir(path)
+# 循环取出文件名
+for file in file_list:
+    # 拼接文件路径
+    file_path = path + file
+    # 打印文件路径
+    print(file_path)
+
+# -------- 循环打开 Word 文件--------
+pip install python-docx
+import docx
+from docx import ...
+# 最常见的块级元素(block-level)是 Paragraph 对象
+# 最常见的内联元素(inline-level)是 Run 对象
+
+# -------- EXERSICE 1 --------
+import os
+# 导入 Document 类
+import docx
+from docx import Document
+# 设置目标文件夹路径
+path = "../工作/涨薪通告-练习/"
+
+# 获取目标文件夹下的所有文件名
+file_list = os.listdir(path)
+
+for file in file_list:
+    # 拼接文件路径
+    file_path=path+file
+    # 打开 Word 文件
+    doc = Document(file_path)
+    # 打印文档对象
+    print(doc)
+    
+# -------- 添加文字和图片 --------
+# heading
+Document 对象.add_heading()
+# table
+Document 对象.add_table()
+
+# paragraph
+  # 空行也算一个paragraph
+from docx import Document
+
+doc = Document('./代码/马邦德涨薪通告.docx')
+
+# 循环遍历 Document 对象中的每一个 Paragraph 对象
+for para in doc.paragraphs:
+    # 打印 Paragraph 对象中的文字
+    print(para.text)
+
+# 打印 Paragraph 对象的个数
+print(len(doc.paragraphs))
+
+# run
+from docx import Document
+
+doc = Document('./代码/马邦德涨薪通告.docx')
+
+# 循环遍历 Document 对象中的每一个 Paragraph 对象
+for para in doc.paragraphs:
+    # 循环遍历 Paragraph 对象中的每一个 Run 对象
+    for run in para.runs:
+        # 打印 Run 对象
+        print(run)
+        # 打印 Run 对象中的文字
+        print(run.text)
+
+# 给 Paragraph 添加 Run 对象
+  # 调用 Paragraph 对象的方法add_run()就可以
+  # 即写为Paragraph 对象.add_run()
+  # 这个方法会在 Paragraph 对象“开辟”的空间内，加入一个 Run 对象
+
+# 添加文字需要 Run 对象调用方法add_text(text)
+from docx importan Document
+
+doc=Document()# 新的文件
+para=doc.add_paragraph() # 开辟空间
+run=para.add_run() # 添加run
+run.add_text('这里就是需要添加的文字内容')
+
+doc.save('./添加文字.docx')
+
+# 嵌入一张图片，需要 Run 对象去调用add_picture(path)方法
+from docx import Document
+
+doc=Document()
+para=doc.add_paragraph()
+run1=para.add_run()
+run1.add_text('添加文字')
+run1.add_picture('./代码/pic.png')
+
+doc.save('./添加文字和图片.docx')
+
+# -------- EXERSICE --------
+from docx import Document
+
+# 创建空的 Document 对象
+doc = Document()
+
+# 添加"两个黄鹂鸣翠柳，一行白鹭上青天。"
+# 添加第一个 Paragraph 对象
+para_1 = doc.add_paragraph()
+# 添加 Run 对象
+run_1 = para_1.add_run()
+# 给 Run 对象添加文字
+run_1.add_text('两个黄鹂鸣翠柳，一行白鹭上青天。')
+
+# 添加"窗含西岭千秋雪，门泊东吴万里船。"
+# 添加第二个 Paragraph 对象
+para_2=doc.add_paragraph()
+# 添加 Run 对象
+run_2 = para_2.add_run()
+# 给 Run 对象添加文字
+run_2.add_text('窗含西岭千秋雪，门泊东吴万里船。')
+
+# 添加"唐-杜甫"和图片
+# 添加第三个 Paragraph 对象
+para_3=doc.add_paragraph()
+# 添加 Run 对象
+run3=para_3.add_run()
+# 给 Run 对象添加文字
+run3.add_text('唐-杜甫')
+# 给 Run 对象添加图片，图片路径为'./杜甫.png'
+run3.add_picture('./杜甫.png')
+
+# 保存文档
+doc.save('./绝句-杜甫.docx')
+
+# Using other alternative codes
+# add_paragraph(text)相当于python-docx 帮你走完了整个流程（添加Paragraph 对象，添加 Run 对象，最后再添加文字。）
+# add_run(text)相当于 python-docx 帮你添加了 run 对象的同时直接调用了 add_text() 方法。
+
+# The exercise used above can be modified as follows:
+para_1=doc.add_paragraph('两个黄鹂鸣翠柳，一行白鹭上青天。')
+para_2=doc.add_paragraph('窗含西岭千秋雪，门泊东吴万里船。')
+para_3=doc.add_paragraph()
+run3=para_3.add_run()
+run3.add_text('唐-杜甫')
+run3.add_picture('./杜甫.png')
+
+# -------- EXERCISE --------
+案代码。
+
+
+from docx import Document
+
+# 设置文件路径
+file_path = './马邦德涨薪通告.docx'
+
+# 打开 Word 文件
+doc = Document(file_path)
+
+# 添加'盖章：'与电子章图片(图片路径为：'./Shining.png')
+# 添加段落1
+para_1 = doc.add_paragraph("盖章: ")
+# 添加 run_stamp
+run_stamp = para_1.add_run()
+run_stamp.add_picture("./Shining.png")
+# 保存文件
+doc.save('./添加盖章和图片.docx')
+
+# -------- 添加带样式的文字 --------
+  # 段落样式 paragraph_format.alignment
+from docx import Document
+from docx.enum.text import WD_ALIGN_PARAGRAPH
+
+# 创建空的 Document 对象
+doc = Document()
+
+# 添加 Paragraph 对象
+para_1 = doc.add_paragraph('两个黄鹂鸣翠柳，一行白鹭上青天。')
+# 设置对齐方式为左对齐
+para_1.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.LEFT
+
+# 添加 Paragraph 对象
+para_2 = doc.add_paragraph('窗含西岭千秋雪，门泊东吴万里船。')
+# 设置对齐方式为居中对齐
+para_2.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+# 添加 Paragraph 对象
+para_3 = doc.add_paragraph('唐-杜甫-《绝句》')
+# 设置对齐方式为右对齐
+para_3.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+
+doc.save('./对齐方式.docx')
+
+  # 字号样式 导入 Pt
+from docx.shared import Pt
+
+# 设置字体大小
+Run 对象.font.size = Pt(14) # 字体大小
+# 设置字体加粗
+Run 对象.font.bold = True # 字体加粗
+
+# -------- EXERCISE --------
+from docx import Document
+# 导入控制对齐方式所需
+from docx.enum.text import WD_ALIGN_PARAGRAPH
+# 导入控制字体大小所需
+from docx.shared import Pt
+
+# 设置文件路径
+file_path = './马邦德涨薪通告.docx'
+
+# 打开文档
+doc = Document(file_path)
+# 添加段落2
+para = doc.add_paragraph()
+# 设置对齐方式
+para.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+# 添加 run_comp
+run_comp = para.add_run("闪光科技金融公司(Shining Fintech Company)")
+# 设置字体大小为 14pt
+run_comp.font.size = Pt(14)
+# 设置字体加粗
+run_comp.font.bold = True
+# 保存文件
+doc.save('./添加带样式的文字.docx')
