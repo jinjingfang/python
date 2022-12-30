@@ -1,0 +1,379 @@
+### This is an exercise 
+
+web spider that retrieve info and restore info
+#看看程序是如何实现“获取网页、解析数据、提取数据”这三个功能
+
+import requests
+from bs4 import BeautifulSoup
+
+# 获取网页
+# 《乌合之众》网页的 URL
+url = 'https://wp.forchange.cn/psychology/11069/'
+# 请求网页
+res = requests.get(url)
+# 打印响应的状态码
+print(res.status_code)
+# 将响应内容的编码格式设置为utf-8
+res.encoding = 'utf-8'
+            
+# 解析网页
+# 解析请求到的网页，得到 BeautifulSoup 对象
+bs = BeautifulSoup(res.text, 'html.parser')
+
+# 搜索书籍信息的父节点<div>
+info_tag = bs.find('div', class_='res-attrs')
+# 搜索每条信息的节点<dl>
+info_list = info_tag.find_all('dl')
+
+# 创建字典，存储书籍信息
+info_dict = {}        
+
+# 遍历搜索结果，提取文本内容，存储到字典中
+for info in info_list:
+    # 提取信息提示项<dt>的元素内容
+    key = info.find('dt').text[:-2]
+    # 提取书籍信息<dd>的元素内容
+    value = info.find('dd').text
+    # 将信息添加到字典中
+    info_dict[key] = value
+
+# 打印查看字典中的书籍信息
+print(info_dict)
+
+
+### Analysing data
+### use bs4
+### 获取html网页 ->
+    解析数据（i.e.,将html文档转化为python可以处理的对象） ->
+    说明书（i.e.,解释器）： html.parser ->
+    bs4 库负责依据说明书，按图纸制造出模型 ->
+    解析 HTML 文档的过程就是实例化 BeautifulSoup 类，得到 BeautifulSoup 对象的过程
+
+### BeautifulSoul对象.元素名，默认取第一个节点
+from bs4 import BeautifulSoup
+
+html = '''
+    <html>
+    <head>
+    <meta charset="utf-8">
+    <title>大川神的爬虫世界</title>
+    </head>
+    <body>
+    <div id="header">
+    <h1>川神教你HTML</h1>
+    </div>
+    <div class="poems" id="section1">
+    <h2>静夜思</h2>
+    <h3>李白（唐）</h3>
+    <p>床前明月光，疑是地上霜。<br>举头望明月，低头思故乡。</p>
+    </div>
+    <div class="poems" id="section2">
+    <h2>早发白帝城</h2>
+    <h3>李白（唐）</h3>
+    <p>朝辞白帝彩云间，千里江陵一日还。<br>两岸猿声啼不住，轻舟已过万重山。</p>
+    </div>
+    </body>
+    </html>
+    '''
+# 解析 HTML 文档
+bs = BeautifulSoup(html, 'html.parser')
+# 用.div获取<div>节点，这里默认是第一个节点
+div_tag = bs.div
+
+# 打印查看结果
+print(div_tag)
+
+### Tag 对象.元素名，看114行
+from bs4 import BeautifulSoup
+
+html = '''
+    <html>
+    <head>
+    <meta charset="utf-8">
+    <title>大川神的爬虫世界</title>
+    </head>
+    <body>
+    <div id="header">
+    <h1>川神教你HTML</h1>
+    </div>
+    <div class="poems" id="section1">
+    <h2>静夜思</h2>
+    <h3>李白（唐）</h3>
+    <p>床前明月光，疑是地上霜。<br>举头望明月，低头思故乡。</p>
+    </div>
+    <div class="poems" id="section2">
+    <h2>早发白帝城</h2>
+    <h3>李白（唐）</h3>
+    <p>朝辞白帝彩云间，千里江陵一日还。<br>两岸猿声啼不住，轻舟已过万重山。</p>
+    </div>
+    </body>
+    </html>
+    '''
+# 解析 HTML 文档
+bs = BeautifulSoup(html, 'html.parser')
+# 用.div获取<div>节点
+div_tag = bs.div
+# 从<div>节点中获取<h1>节点
+h1_tag = div_tag.h1 #OR: h1_tag = div_tag.find('h1')
+
+# 打印查看结果
+print(h1_tag)
+
+### find_all(), find()[只能返回第一个tag对象]
+### 什么范围找？怎么用
+
+# 如果从 BeautifulSoup 对象中搜索，语法是：BeautifulSoup 对象.find_all()；
+# 从 Tag 对象中搜索，语法是：Tag 对象.find_all()。
+
+## Example 1: 用元素名, see line 154
+from bs4 import BeautifulSoup
+
+html = '''
+    <html>
+    <head>
+    <meta charset="utf-8">
+    <title>大川神的爬虫世界</title>
+    </head>
+    <body>
+    <div id="header">
+    <h1>川神教你HTML</h1>
+    </div>
+    <div class="poems" id="section1">
+    <h2>静夜思</h2>
+    <h3>李白（唐）</h3>
+    <p>床前明月光，疑是地上霜。<br>举头望明月，低头思故乡。</p>
+    </div>
+    <div class="poems" id="section2">
+    <h2>早发白帝城</h2>
+    <h3>李白（唐）</h3>
+    <p>朝辞白帝彩云间，千里江陵一日还。<br>两岸猿声啼不住，轻舟已过万重山。</p>
+    </div>
+    </body>
+    </html>
+    '''
+# 解析 HTML 文档
+bs = BeautifulSoup(html, 'html.parser')
+# 用find_all()获取所有<div>节点
+div_all = bs.find_all('div')
+
+# 打印查看结果
+print(div_all)
+
+## Example 2: 用元素属性, see line 188
+from bs4 import BeautifulSoup
+
+html = '''
+    <html>
+    <head>
+    <meta charset="utf-8">
+    <title>大川神的爬虫世界</title>
+    </head>
+    <body>
+    <div id="header">
+    <h1>川神教你HTML</h1>
+    </div>
+    <div class="poems" id="section1">
+    <h2>静夜思</h2>
+    <h3>李白（唐）</h3>
+    <p>床前明月光，疑是地上霜。<br>举头望明月，低头思故乡。</p>
+    </div>
+    <div class="poems" id="section2">
+    <h2>早发白帝城</h2>
+    <h3>李白（唐）</h3>
+    <p>朝辞白帝彩云间，千里江陵一日还。<br>两岸猿声啼不住，轻舟已过万重山。</p>
+    </div>
+    </body>
+    </html>
+    '''
+# 解析 HTML 文档
+bs = BeautifulSoup(html, 'html.parser')
+# 用find_all()获取所有含属性class="poems"的HTML元素对应的节点
+# 注意：HTML 的 class 属性与 Python 的保留关键字 class 重复。因此，作为参数使用 class 属性时，要加一个_，写作class_，避免混淆。
+poems_all = bs.find_all(class_='poems')
+
+# 打印查看结果
+print(poems_all)
+
+## Example 3: 用for循环和Tag+find_all()
+# 逻辑：
+  # 由于 find_all() 返回的都是满足所有参数条件的 Tag 对象，
+  # 因此，可以结合使用上述两种参数，更准确定位到 Tag 对象。
+  # 同时使用 HTML 元素名和 HTML 元素属性作为搜索条件时，
+  # 要把 HTML 元素名作为第 1 个参数，后面接 0 到多个 HTML 元素属性。
+  # find_all() 返回的结果并不是 Tag 对象
+  # 而是 Tag 对象组成的一个类似列表的可迭代对象
+  # 要拿到其中的 Tag 对象，通常需要for 循环来帮忙。
+
+# see line 235-238
+from bs4 import BeautifulSoup
+
+html = '''
+    <html>
+    <head>
+    <meta charset="utf-8">
+    <title>大川神的爬虫世界</title>
+    </head>
+    <body>
+    <div id="header">
+    <h1>川神教你HTML</h1>
+    </div>
+    <div class="poems" id="section1">
+    <h2>静夜思</h2>
+    <h3>李白（唐）</h3>
+    <p>床前明月光，疑是地上霜。<br>举头望明月，低头思故乡。</p>
+    </div>
+    <div class="poems" id="section2">
+    <h2>早发白帝城</h2>
+    <h3>李白（唐）</h3>
+    <p>朝辞白帝彩云间，千里江陵一日还。<br>两岸猿声啼不住，轻舟已过万重山。</p>
+    </div>
+    </body>
+    </html>
+    '''
+# 解析 HTML 文档
+bs = BeautifulSoup(html, 'html.parser')
+# 用find_all()获取所有含属性class="poems"的HTML元素对应的节点
+poems_all = bs.find_all(class_='poems')
+
+# 遍历 find_all() 的结果 poems_all，得到其中的每个节点，并打印
+for poem in poems_all:
+    print('------打印 Tag 对象------')
+    print(poem)
+
+## Example 4: 用find()
+from bs4 import BeautifulSoup
+
+html = '''
+    <html>
+    <head>
+    <meta charset="utf-8">
+    <title>大川神的爬虫世界</title>
+    </head>
+    <body>
+    <div id="header">
+    <h1>川神教你HTML</h1>
+    </div>
+    <div class="poems" id="section1">
+    <h2>静夜思</h2>
+    <h3>李白（唐）</h3>
+    <p>床前明月光，疑是地上霜。<br>举头望明月，低头思故乡。</p>
+    </div>
+    <div class="poems" id="section2">
+    <h2>早发白帝城</h2>
+    <h3>李白（唐）</h3>
+    <p>朝辞白帝彩云间，千里江陵一日还。<br>两岸猿声啼不住，轻舟已过万重山。</p>
+    </div>
+    </body>
+    </html>
+    '''
+# 解析 HTML 文档
+bs = BeautifulSoup(html, 'html.parser')
+# 用find()获取第一个满足参数条件的节点
+poem1_tag = bs.find('div', class_='poems')
+
+# 打印查看结果，这里会返回静夜思div的节点
+print(poem1_tag)
+
+
+### 从 Tag 对象中提取内容，see line 307
+from bs4 import BeautifulSoup
+
+html = '''
+    <html>
+    <head>
+    <meta charset="utf-8">
+    <title>大川神的爬虫世界</title>
+    </head>
+    <body>
+    <div id="header">
+    <h1>川神教你HTML</h1>
+    </div>
+    <div class="poems" id="section1">
+    <h2>静夜思</h2>
+    <h3>李白（唐）</h3>
+    <p>床前明月光，疑是地上霜。<br>举头望明月，低头思故乡。</p>
+    </div>
+    <div class="poems" id="section2">
+    <h2>早发白帝城</h2>
+    <h3>李白（唐）</h3>
+    <p>朝辞白帝彩云间，千里江陵一日还。<br>两岸猿声啼不住，轻舟已过万重山。</p>
+    </div>
+    </body>
+    </html>
+    '''
+# 解析 HTML 文档
+bs = BeautifulSoup(html, 'html.parser')
+# 用find()获取第一个满足参数条件的节点
+poem1_tag = bs.find('div', class_='poems')
+# 用find()从poem1_tag中提取<h2>节点，用.text获取文本内容
+h2_text = poem1_tag.find('h2').text
+# 打印查看结果
+print(h2_text)
+
+### Tag 对象['属性名']，可用来提取对应元素的属性值。
+### see line 325 & 341
+from bs4 import BeautifulSoup
+
+html = '''
+    <html>
+    <head>
+    <meta charset="utf-8">
+    <title>大川神的爬虫世界</title>
+    </head>
+    <body>
+    <div id="header">
+    <h1>川神教你HTML</h1>
+    </div>
+    <div class="poems" id="section1">
+    <h2>静夜思</h2>
+    <h3>李白（唐）</h3>
+    <p>床前明月光，疑是地上霜。<br>举头望明月，低头思故乡。</p>
+    </div>
+    <div class="poems" id="section2">
+    <h2>早发白帝城</h2>
+    <h3>李白（唐）</h3>
+    <p>朝辞白帝彩云间，千里江陵一日还。<br>两岸猿声啼不住，轻舟已过万重山。</p>
+    </div>
+    </body>
+    </html>
+    '''
+# 解析 HTML 文档
+bs = BeautifulSoup(html, 'html.parser')
+# 用find()获取第一个满足条件节点的id属性值
+poem1_id = bs.find('div', class_='poems')['id']
+
+# 打印查看结果
+print(poem1_id)
+
+### Exercise
+
+import requests
+from bs4 import BeautifulSoup
+
+# 获取网页
+# 《乌合之众》网页的 URL
+url = 'https://wp.forchange.cn/psychology/11069/'
+# 请求网页
+res = requests.get(url)
+# 打印响应的状态码
+print(res.status_code)
+# 将响应内容的编码格式设置为utf-8
+res.encoding = 'utf-8'
+            
+# 解析网页
+# 解析请求到的网页，得到 BeautifulSoup 对象
+bs = BeautifulSoup(res.text, 'html.parser')
+
+# 搜索书籍信息的父节点<div>
+info_tag = bs.find('div', class_='res-attrs')
+# 搜索每条信息的节点<dl>
+info_list = info_tag.find_all('dl')
+
+# 遍历搜索结果，在<dl>节点中继续提取
+for info in info_list:
+    # 提取信息提示项<dt>的元素内容
+    dt = info.find('dt')
+    print(dt)
+    # 提取书籍信息<dd>的元素内容
+    dd = info.find('dd')
+    print(dd)
