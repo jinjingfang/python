@@ -1,0 +1,235 @@
+#### This is to realise web spider and use csv to save info
+
+#### Case: 提取网站书籍列表页前 3 页所有书籍的名字和详细信息
+#### Code preview
+
+import requests
+import csv
+from bs4 import BeautifulSoup
+
+# 设置列表，用以存储每本书籍的信息
+data_list = []
+# 设置页码 page_number
+page_number = 1
+
+# while 循环的条件设置为 page_number 的值是否小于 4
+while page_number < 4:
+    # 设置要请求的网页链接
+    url = 'https://wp.forchange.cn/resources/page/' + str(page_number)
+    
+    # 请求网页
+    books_list_res = requests.get(url)
+
+    # 解析请求到的网页内容
+    bs = BeautifulSoup(books_list_res.text, 'html.parser')
+    # 搜索网页中所有包含书籍名和书籍链接的 Tag
+    href_list = bs.find_all('a', class_='post-title')
+
+    # 使用 for 循环遍历搜索结果
+    for href in href_list:
+        # 创建字典，用以存储书籍信息
+        info_dict = {}
+        # 提取书籍名
+        info_dict['书名'] = href.text
+        # 提取书籍链接
+        book_url = href['href']
+        # 通过书籍链接请求书籍详情页
+        book_list_res = requests.get(book_url)
+
+        # 解析书籍详情页的内容
+        new_bs = BeautifulSoup(book_list_res.text, 'html.parser')
+        # 搜索网页中所有包含书籍各项信息的 Tag
+        info_list = new_bs.find('div', class_='res-attrs').find_all('dl')
+
+        # 使用 for 循环遍历搜索结果
+        for info in info_list:
+            # 提取信息的提示项
+            key = info.find('dt').text[:-2]
+            # 提取信息的内容
+            value = info.find('dd').text
+            # 将信息添加到字典中
+            info_dict[key] = value
+
+        # 打印书籍的信息
+        print(info_dict)
+        # 存储每本书籍的信息
+        data_list.append(info_dict)
+
+    # 页码 page_number 自增
+    page_number += 1
+
+# 新建 csv 文件存储书籍信息
+with open('books.csv', 'w') as f:
+    # 将文件对象转换成 DictWriter 对象
+    writer = csv.DictWriter(f, fieldnames=['书名', '作者', '出版社', 'ISBN', '页数', '出版年', '定价'])
+    # 写入表头与数据
+    writer.writeheader()
+    writer.writerows(data_list)
+
+### Pre-exercise
+# 已知字典 person_1 = {'姓名': '陈知枫', '身高': 175.5, '部门': '运营部'}。
+# 使用字典添加键值对的方式，为空字典 person_2 添加数据：①、姓名：南大川；②、身高：180.0；③、部门：技术部；
+
+data_list = []  
+person_1 = {'姓名': '陈知枫', '身高': 175.5, '部门': '运营部'}  
+person_2 = {}
+
+# 为字典 person_2 添加新的键值对  
+person_2['姓名'] = '南大川'
+person_2['身高'] = 180.0
+person_2['部门'] = '技术部'
+
+# 列表 data_list 添加两个字典
+data_list.append(person_1)
+data_list.append(person_2)
+
+# 打印列表 data_list
+print(data_list)
+
+### Pre-exercise 2
+# 请使用 while 循环以及增强赋值 “-=” 实现功能：
+# 依次打印出倒计时 5 秒、倒计时 4 秒、 …、倒计时 1 秒。
+#【提示】number -= 1 等价于 number = number - 1。
+
+number = 5
+
+while number > 0:
+    print('倒计时 ' + str(number) + ' 秒')
+    number -= 1
+
+### request web
+## method 1: requests.get
+# 导入模块 requests  
+import requests
+
+# 设置网站前 3 页的网页链接
+url_1 = 'https://wp.forchange.cn/'
+url_2 = 'https://wp.forchange.cn/resources/page/2/'
+url_3 = 'https://wp.forchange.cn/resources/page/3/'
+
+# 分别请求网站前 3 页的网页链接
+url_1_res = requests.get(url_1)
+url_2_res = requests.get(url_2)
+url_3_res = requests.get(url_3)
+
+# 分别打印网站前 3 页的响应状态码
+print(url_1_res.status_code)
+print(url_2_res.status_code)
+print(url_3_res.status_code)
+
+## method 2: use while
+# 导入模块 requests  
+import requests
+
+# 设置页码 page_number
+page_number = 1
+
+# 依次取到网站书籍列表页前 3 页的网页链接，请求网页并获取响应状态码
+while page_number < 4:
+    # 设置要请求的网页链接
+    url = 'https://wp.forchange.cn/resources/page/' + str(page_number)
+    # 请求网页
+    books_list_res = requests.get(url)
+    # 打印网页的响应状态码
+    print(books_list_res.status_code)
+    # 页码 page_number 自增
+    page_number += 1
+
+### analyse web
+## 使用 bs4 库里的 BeautifulSoup 类对 HTML 文档进行解析
+# 导入库 requests 以及类 BeautifulSoup  
+import requests  
+from bs4 import BeautifulSoup
+
+# 设置网站书籍列表页第 1 页的链接
+url = 'https://wp.forchange.cn/resources/page/1/'
+# 请求网页
+res = requests.get(url)
+# 解析网页内容得到 BeautifulSoup 对象，赋给变量 bs
+bs = BeautifulSoup(res.text, 'html.parser')
+# 打印变量 bs
+print(bs)
+
+## 定位：所有的书籍名和书籍链接都在属性为 class='post-title' 的 a 元素里
+## see line 166
+# 导入库 requests 以及类 BeautifulSoup  
+import requests  
+from bs4 import BeautifulSoup
+
+# 设置网站书籍列表页第 1 页的链接
+url = 'https://wp.forchange.cn/resources/page/1/'
+# 请求网页
+res = requests.get(url)
+# 解析网页得到 BeautifulSoup 对象，赋给变量 bs
+bs = BeautifulSoup(res.text, 'html.parser')
+# 搜索书籍名在网页上共同的 Tag 对象
+bookname_list = bs.find_all('a', class_='post-title')
+# 打印搜索结果
+print(bookname_list)
+
+# 遍历搜索结果，提取并打印书籍名和书籍链接
+for bookname in bookname_list:
+    # 使用 Tag.text 属性提取书籍名，并打印书籍名
+    print(bookname.text)
+    # 使用 Tag['属性名'] 提取书籍链接，并打印书籍链接
+    # 由于书籍链接与书籍名在同一个 a 元素里，书籍链接存储在元素的属性 href 上，所以使用 Tag['属性名'] 提取属性的内容。
+    print(bookname['href'])
+
+## 书籍详细信息整体都在同一个 div 元素内，而 div 元素里存在多个 dl 元素，dl 元素里存储着书籍的各项信息
+## 定位 dt 元素和 dd 元素，可以提取书籍详细信息的提示项和信息的内容
+# 导入库 requests 以及类 BeautifulSoup  
+import requests  
+from bs4 import BeautifulSoup
+
+# 设置书籍《人性的优点》的网页链接
+url = 'https://wp.forchange.cn/psychology/13501/'
+# 请求网页
+res = requests.get(url)
+# 解析网页得到 BeautifulSoup 对象，赋给变量 bs
+bs = BeautifulSoup(res.text, 'html.parser')
+# 搜索网页中包含书籍各项信息的 Tag
+bookinfo_list = bs.find('div', class_='res-attrs').find_all('dl')
+
+# 遍历搜索结果，提取并打印书籍各项信息
+for info in bookinfo_list:
+    # 提取信息的提示项
+    key = info.find('dt').text[:-2] #这里的 [:-2] 是为了去除多余的内容："： "
+    # 提取信息的内容
+    value = info.find('dd').text
+    # 打印信息的提示项
+    print(key)
+    # 打印信息的内容
+    print(value)
+
+## 用字典来储存
+# 创建字典，用以存储书籍信息
+info_dict = {}
+for info in bookinfo_list:
+    # 提取信息的提示项
+    key = info.find('dt').text[:-2] #这里的 [:-2] 是为了去除多余的内容："： "
+    # 提取信息的内容
+    value = info.find('dd').text
+    # 将信息添加到字典中
+    info_dict[key] = value
+# 打印查看字典中的书籍信息
+print(info_dict)
+
+### save info
+## pre-exercise
+# 导入 csv 模块  
+import csv
+
+# 设置列表
+data_list = [{'姓名': '陈知枫', '性别': '男', '身高': '175.5', '部门': '运营部'}, {'姓名': '南大川', '性别': '男', '身高': '180', '部门': '技术部'}]
+# 设置表头
+headers = ['姓名', '性别', '身高', '部门']
+
+# 创建并打开 info.csv
+with open('info.csv', 'w', encoding='utf-8', newline='') as demo_file:
+    # 将文件对象转换为 DictWriter() 对象 ################ 之前没有学过？
+    writer = csv.DictWriter(demo_file, fieldnames=headers)
+    # 写入表头与数据
+    writer.writeheader()
+    writer.writerows(data_list)
+
+    
