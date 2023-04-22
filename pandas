@@ -1,0 +1,37 @@
+# 导入pandas库
+import pandas as pd
+
+#借助列表来创建 Series 对象的方法，也就是：pd.Series(data)
+
+## example1
+# 创建 Series 对象
+surname = pd.Series(['赵', '钱', '孙', '李'])
+# 查看surname
+surname
+## example2
+# 创建 Series 对象
+surname = pd.Series(['赵', '钱', '孙', '李'], index = ['学生1', '学生2', '学生3', '学生4'])
+# 查看surname
+surname
+
+# 自由练习
+pd.Series({'1月':109,'2月':129,'3月':158})
+
+pd.Series(5)
+
+import numpy as np
+pd.Series(np.array([1,2]))
+
+pd.Series('hello')
+
+## Basics:
+# 创建两个原始列表
+temp_list1 = [1, 2, 3, 4]
+temp_list2 = [5, 6, 2, 3]
+# 创建新列表 temp_list_new
+temp_list_new = []
+# 将两个原始列表的元素之和添加进 temp_list_new
+for i in range(len(temp_list1)):
+    temp_list_new.append(temp_list1[i] + temp_list2[i])
+# 查看新列表 temp_list_new
+temp_list_new
